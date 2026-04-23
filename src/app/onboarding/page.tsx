@@ -13,7 +13,7 @@ export default async function OnboardingPage() {
   return (
     <main className="flex flex-1 flex-col px-6 pt-16 pb-12">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">
+        <h1 className="font-serif text-3xl font-medium text-foreground">
           Pick your handle
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">

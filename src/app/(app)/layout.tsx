@@ -16,17 +16,16 @@ export default async function AppLayout({
 
   return (
     <>
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-background/80 px-5 py-3 backdrop-blur pt-[calc(env(safe-area-inset-top)+0.75rem)]">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-background/85 px-5 py-3 backdrop-blur-sm pt-[calc(env(safe-area-inset-top)+0.75rem)]">
         <Link
           href="/today"
-          className="flex items-center gap-2 text-sm font-semibold tracking-tight"
+          className="text-sm font-medium text-foreground"
         >
-          <span className="inline-block h-2 w-2 rounded-full bg-foreground" />
           FrameGame
         </Link>
         <Link
           href={`/u/${profile.username}`}
-          className="text-xs font-mono text-muted-foreground hover:text-foreground"
+          className="text-xs text-muted-foreground hover:text-foreground"
         >
           @{profile.username}
         </Link>

@@ -41,8 +41,8 @@ export default async function ArchiveDatePage({
       </div>
       <div className="mt-6">
         <div className="mb-3 flex items-end justify-between">
-          <h2 className="text-sm font-semibold tracking-tight">Collage</h2>
-          <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <h2 className="text-sm font-semibold text-foreground">Collage</h2>
+          <span className="text-xs text-muted-foreground">
             {posts.length} post{posts.length === 1 ? "" : "s"}
           </span>
         </div>

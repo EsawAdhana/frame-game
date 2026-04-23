@@ -42,7 +42,7 @@ export function SettingsForm({ profile }: { profile: Profile }) {
       </div>
 
       <div className="space-y-2">
-        <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <label className="text-xs font-medium text-muted-foreground">
           Username
         </label>
         <Input
@@ -55,14 +55,14 @@ export function SettingsForm({ profile }: { profile: Profile }) {
       </div>
 
       <div className="space-y-2">
-        <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <label className="text-xs font-medium text-muted-foreground">
           Display name
         </label>
         <Input name="display_name" defaultValue={profile.display_name ?? ""} />
       </div>
 
       <div className="space-y-2">
-        <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <label className="text-xs font-medium text-muted-foreground">
           Bio
         </label>
         <Textarea

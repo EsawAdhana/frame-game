@@ -33,9 +33,7 @@ export default async function ProfilePage({
         </div>
         <div className="text-right">
           <div className="text-xl font-semibold">{posts.length}</div>
-          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-            Posts
-          </div>
+          <div className="text-xs text-muted-foreground">Posts</div>
         </div>
       </section>
 
@@ -46,7 +44,7 @@ export default async function ProfilePage({
       )}
 
       <div className="mt-6">
-        <h2 className="mb-3 text-sm font-semibold tracking-tight">
+        <h2 className="mb-3 text-sm font-semibold text-foreground">
           History
         </h2>
         <CollageGrid posts={posts} />

@@ -16,7 +16,7 @@ export function BottomNav() {
   const pathname = usePathname();
   return (
     <nav
-      className="sticky bottom-0 z-10 mt-auto grid grid-cols-4 border-t border-border bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+      className="sticky bottom-0 z-10 mt-auto grid grid-cols-4 border-t border-border bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm"
       aria-label="Primary"
     >
       {items.map(({ href, label, icon: Icon, primary }) => {
@@ -26,14 +26,14 @@ export function BottomNav() {
             key={href}
             href={href}
             className={cn(
-              "flex flex-col items-center gap-0.5 py-3 text-[10px] font-medium uppercase tracking-wider",
+              "flex flex-col items-center gap-0.5 py-3 text-[11px] font-medium",
               active ? "text-foreground" : "text-muted-foreground",
             )}
           >
             <span
               className={cn(
                 "flex h-9 w-9 items-center justify-center rounded-full",
-                primary && "bg-foreground text-background",
+                primary && "bg-primary text-primary-foreground",
                 !primary && active && "bg-muted",
               )}
             >

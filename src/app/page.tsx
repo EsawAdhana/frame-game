@@ -13,11 +13,8 @@ export default async function LandingPage() {
   return (
     <main className="flex flex-1 flex-col justify-between px-6 pt-24 pb-12">
       <div>
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-foreground" />
-          FrameGame
-        </div>
-        <h1 className="mt-6 text-4xl font-semibold leading-[1.1] tracking-tight">
+        <p className="text-xs text-muted-foreground">FrameGame</p>
+        <h1 className="mt-6 font-serif text-4xl font-medium leading-[1.12] text-foreground">
           One prompt a day.
           <br />
           <span className="text-muted-foreground">Everyone&apos;s frame.</span>
@@ -27,13 +24,11 @@ export default async function LandingPage() {
           and a collage that only exists for today.
         </p>
 
-        <div className="mt-10 rounded-2xl border border-border bg-card p-5">
-          <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Today&apos;s prompt
-          </div>
-          <div className="mt-2 text-xl font-medium leading-snug">
+        <div className="mt-10 rounded-2xl border border-border/80 bg-card p-5 shadow-[0_1px_2px_rgba(68,64,60,0.06)]">
+          <div className="text-xs text-muted-foreground">Today&apos;s prompt</div>
+          <p className="mt-2 font-serif text-xl font-medium leading-snug text-foreground">
             {prompt?.text ?? "New prompt loading\u2026"}
-          </div>
+          </p>
         </div>
       </div>
 

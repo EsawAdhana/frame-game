@@ -8,7 +8,7 @@ export default async function ArchivePage() {
 
   return (
     <main className="flex-1 px-5 py-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Archive</h1>
+      <h1 className="font-serif text-2xl font-medium text-foreground">Archive</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Every prompt that&apos;s come before.
       </p>
@@ -35,10 +35,10 @@ export default async function ArchivePage() {
                   className="flex items-start justify-between gap-4 rounded-2xl border border-border bg-card px-4 py-3 transition-colors hover:bg-accent"
                 >
                   <div>
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                    <div className="text-xs text-muted-foreground tabular-nums">
                       {label}
                     </div>
-                    <div className="mt-0.5 text-sm font-medium leading-snug">
+                    <div className="mt-0.5 text-sm font-medium leading-snug text-foreground">
                       {p.text}
                     </div>
                   </div>

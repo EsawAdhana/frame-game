@@ -9,7 +9,7 @@ export default async function SettingsPage() {
 
   return (
     <main className="flex-1 px-5 py-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+      <h1 className="font-serif text-2xl font-medium text-foreground">Settings</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Update how you show up on FrameGame.
       </p>

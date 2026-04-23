@@ -1,16 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lora, Source_Sans_3 } from "next/font/google";
 import { Toaster } from "sonner";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sourceSans = Source_Sans_3({
+  variable: "--font-source-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
 });
 
@@ -18,11 +18,14 @@ export const metadata: Metadata = {
   title: "FrameGame",
   description: "One prompt a day. Your frame. Everyone's canvas.",
   manifest: "/manifest.webmanifest",
-  appleWebApp: { title: "FrameGame", capable: true, statusBarStyle: "black-translucent" },
+  appleWebApp: { title: "FrameGame", capable: true, statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#faf7f1" },
+    { media: "(prefers-color-scheme: dark)", color: "#2a2624" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -38,7 +41,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${sourceSans.variable} ${lora.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <Providers>

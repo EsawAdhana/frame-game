@@ -51,10 +51,10 @@ export default async function TodayPage() {
 
       <div className="mt-6">
         <div className="mb-3 flex items-end justify-between">
-          <h2 className="text-sm font-semibold tracking-tight">
+          <h2 className="text-sm font-semibold text-foreground">
             {hasPosted ? "Today\u2019s collage" : `Peek (${posts.length})`}
           </h2>
-          <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <span className="text-xs text-muted-foreground">
             {posts.length} post{posts.length === 1 ? "" : "s"}
           </span>
         </div>
