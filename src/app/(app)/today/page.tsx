@@ -3,7 +3,7 @@ import { PromptHero } from "@/components/prompt-hero";
 import { CollageGrid } from "@/components/collage-grid";
 import { Button } from "@/components/ui/button";
 import { getTodayPrompt } from "@/lib/db/prompts";
-import { getFeedForPrompt, hasPostedForPrompt } from "@/lib/db/posts";
+import { getRankedFeedForPrompt, hasPostedForPrompt } from "@/lib/db/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +21,11 @@ export default async function TodayPage() {
     );
   }
 
-  const [posts, hasPosted] = await Promise.all([
-    getFeedForPrompt(prompt.id),
+  const [feed, hasPosted] = await Promise.all([
+    getRankedFeedForPrompt(prompt.id),
     hasPostedForPrompt(prompt.id),
   ]);
+  const totalPosts = feed.mine.length + feed.friends.length + feed.others.length;
 
   const dateLabel = new Date(`${prompt.active_date}T00:00:00Z`).toLocaleDateString(
     undefined,
@@ -52,14 +53,43 @@ export default async function TodayPage() {
       <div className="mt-6">
         <div className="mb-3 flex items-end justify-between">
           <h2 className="text-sm font-semibold text-foreground">
-            {hasPosted ? "Today\u2019s collage" : `Peek (${posts.length})`}
+            {hasPosted ? "Today\u2019s collage" : `Peek (${totalPosts})`}
           </h2>
           <span className="text-xs text-muted-foreground">
-            {posts.length} post{posts.length === 1 ? "" : "s"}
+            {totalPosts} post{totalPosts === 1 ? "" : "s"}
           </span>
         </div>
         {hasPosted ? (
-          <CollageGrid posts={posts} />
+          <div className="space-y-6">
+            {feed.mine.length > 0 && (
+              <section>
+                <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Your post
+                </h3>
+                <CollageGrid posts={feed.mine} />
+              </section>
+            )}
+            {feed.friends.length > 0 && (
+              <section className="border-t border-border pt-6">
+                <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Friends
+                </h3>
+                <CollageGrid posts={feed.friends} />
+              </section>
+            )}
+            <section
+              className={
+                feed.mine.length > 0 || feed.friends.length > 0
+                  ? "border-t border-border pt-6"
+                  : ""
+              }
+            >
+              <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Everyone
+              </h3>
+              <CollageGrid posts={feed.others} />
+            </section>
+          </div>
         ) : (
           <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-muted-foreground">
             Post today&apos;s photo to reveal everyone else&apos;s.

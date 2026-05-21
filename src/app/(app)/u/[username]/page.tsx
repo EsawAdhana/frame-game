@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
 import { CollageGrid } from "@/components/collage-grid";
+import { FollowButton } from "@/components/follow-button";
 import { getProfileByUsername } from "@/lib/db/profiles";
 import { getPostsByUsername } from "@/lib/db/posts";
+import { isFollowing } from "@/lib/db/follows";
+import { getSessionUser } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +18,13 @@ export default async function ProfilePage({
   const profile = await getProfileByUsername(username);
   if (!profile) notFound();
 
-  const posts = await getPostsByUsername(username);
+  const [posts, viewer] = await Promise.all([
+    getPostsByUsername(username),
+    getSessionUser(),
+  ]);
+  const isMe = viewer?.id === profile.id;
+  const viewerFollows =
+    viewer && !isMe ? await isFollowing(viewer.id, profile.id) : false;
 
   return (
     <main className="flex-1 px-5 py-6">
@@ -36,6 +45,15 @@ export default async function ProfilePage({
           <div className="text-xs text-muted-foreground">Posts</div>
         </div>
       </section>
+
+      {viewer && !isMe && (
+        <div className="mt-4">
+          <FollowButton
+            targetUserId={profile.id}
+            initialFollowing={viewerFollows}
+          />
+        </div>
+      )}
 
       {profile.bio && (
         <p className="mt-4 text-sm text-muted-foreground whitespace-pre-wrap">

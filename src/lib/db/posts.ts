@@ -1,6 +1,13 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { getFollowingIds } from "@/lib/db/follows";
 import type { PostWithAuthor } from "@/lib/types";
+
+export type RankedFeed = {
+  mine: PostWithAuthor[];
+  friends: PostWithAuthor[];
+  others: PostWithAuthor[];
+};
 
 type FeedRow = {
   id: string;
@@ -93,6 +100,55 @@ export async function getFeedForPrompt(
     shaped.liked_by_me = likedSet.has(r.id);
     return shaped;
   });
+}
+
+/**
+ * Returns today's feed partitioned into the viewer's own post, posts by
+ * users the viewer follows ("friends"), and everyone else. Each non-self
+ * bucket is sorted by like count desc, then created_at desc.
+ */
+export async function getRankedFeedForPrompt(
+  promptId: string,
+): Promise<RankedFeed> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data } = await supabase
+    .from("posts")
+    .select(FEED_SELECT_SIMPLE)
+    .eq("prompt_id", promptId)
+    .order("created_at", { ascending: false });
+
+  const rows = (data ?? []) as unknown as FeedRow[];
+  const likedSet = await getViewerLikes(rows.map((r) => r.id));
+  const followingIds = user
+    ? await getFollowingIds(user.id)
+    : new Set<string>();
+
+  const mine: PostWithAuthor[] = [];
+  const friends: PostWithAuthor[] = [];
+  const others: PostWithAuthor[] = [];
+  for (const r of rows) {
+    const shaped = shapeRow(r, user?.id ?? null);
+    shaped.liked_by_me = likedSet.has(r.id);
+    if (user && shaped.user_id === user.id) {
+      mine.push(shaped);
+    } else if (followingIds.has(shaped.user_id)) {
+      friends.push(shaped);
+    } else {
+      others.push(shaped);
+    }
+  }
+
+  const byLikesThenRecent = (a: PostWithAuthor, b: PostWithAuthor) =>
+    b.like_count - a.like_count ||
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  friends.sort(byLikesThenRecent);
+  others.sort(byLikesThenRecent);
+
+  return { mine, friends, others };
 }
 
 export async function getPostById(id: string): Promise<PostWithAuthor | null> {
