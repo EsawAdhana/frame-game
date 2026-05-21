@@ -66,7 +66,7 @@ export default async function TodayPage() {
                 <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   Your post
                 </h3>
-                <CollageGrid posts={feed.mine} />
+                <CollageGrid posts={feed.mine} avatarOpensProfile={false} />
               </section>
             )}
             {feed.friends.length > 0 && (
@@ -74,7 +74,7 @@ export default async function TodayPage() {
                 <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   Friends
                 </h3>
-                <CollageGrid posts={feed.friends} />
+                <CollageGrid posts={feed.friends} avatarOpensProfile={false} />
               </section>
             )}
             <section
@@ -87,7 +87,7 @@ export default async function TodayPage() {
               <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Everyone
               </h3>
-              <CollageGrid posts={feed.others} />
+              <CollageGrid posts={feed.others} avatarOpensProfile={false} />
             </section>
           </div>
         ) : (

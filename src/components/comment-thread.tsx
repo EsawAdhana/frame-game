@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Avatar } from "@/components/ui/avatar";
@@ -44,16 +45,21 @@ export function CommentThread({
         ) : (
           comments.map((c) => (
             <div key={c.id} className="flex gap-3">
-              <Avatar
-                src={c.author.avatar_url}
-                alt={c.author.display_name ?? c.author.username}
-                size={32}
-              />
+              <Link href={`/u/${c.author.username}`} className="shrink-0">
+                <Avatar
+                  src={c.author.avatar_url}
+                  alt={c.author.display_name ?? c.author.username}
+                  size={32}
+                />
+              </Link>
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-sm font-medium">
+                  <Link
+                    href={`/u/${c.author.username}`}
+                    className="text-sm font-medium hover:underline"
+                  >
                     @{c.author.username}
-                  </span>
+                  </Link>
                   <span className="text-xs text-muted-foreground">
                     {relativeTime(c.created_at)}
                   </span>

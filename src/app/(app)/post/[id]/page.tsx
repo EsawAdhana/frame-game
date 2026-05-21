@@ -57,7 +57,7 @@ export default async function PostDetailPage({
         <div className="flex items-center justify-between">
           <Link
             href={`/u/${post.author.username}`}
-            className="flex items-center gap-3"
+            className="group flex items-center gap-3"
           >
             <Avatar
               src={post.author.avatar_url}
@@ -65,7 +65,7 @@ export default async function PostDetailPage({
               size={40}
             />
             <div>
-              <div className="text-sm font-semibold">
+              <div className="text-sm font-semibold group-hover:underline">
                 {post.author.display_name ?? `@${post.author.username}`}
               </div>
               <div className="text-xs text-muted-foreground">
