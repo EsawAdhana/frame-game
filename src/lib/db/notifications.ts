@@ -78,20 +78,48 @@ const NOTIFICATION_SELECT = `
   )
 `;
 
-export async function hasUnreadNotifications(): Promise<boolean> {
+/** Bell badge: notifications created after the user last opened the inbox. */
+export async function hasNotificationBellBadge(): Promise<boolean> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return false;
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("notifications_seen_at")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const seenAt =
+    profile?.notifications_seen_at ?? "1970-01-01T00:00:00.000Z";
+
   const { count, error } = await supabase
     .from("notifications")
     .select("id", { count: "exact", head: true })
     .eq("user_id", user.id)
-    .is("read_at", null);
+    .gt("created_at", seenAt);
   if (error) return false;
   return (count ?? 0) > 0;
+}
+
+export async function markNotificationsInboxSeen(): Promise<
+  { ok: true } | { ok: false; error: string }
+> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Not signed in." };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ notifications_seen_at: new Date().toISOString() })
+    .eq("id", user.id);
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
 }
 
 export async function listNotifications(

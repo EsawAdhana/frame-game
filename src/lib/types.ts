@@ -4,6 +4,7 @@ export type Profile = {
   display_name: string | null;
   avatar_url: string | null;
   bio: string | null;
+  notifications_seen_at: string | null;
   created_at: string;
 };
 

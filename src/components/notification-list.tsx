@@ -22,7 +22,7 @@ export function NotificationList({
   }
 
   return (
-    <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
+    <ul className="overflow-hidden rounded-2xl border border-border bg-card divide-y divide-border">
       {notifications.map((n) => (
         <NotificationRow key={n.id} notification={n} />
       ))}
@@ -48,10 +48,7 @@ function NotificationRow({ notification }: { notification: NotificationWithActor
         type="button"
         onClick={open}
         disabled={pending}
-        className={cn(
-          "flex w-full items-start gap-3 px-4 py-3.5 text-left transition-colors hover:bg-accent disabled:opacity-60",
-          unread && "bg-card",
-        )}
+        className="flex w-full items-start gap-3 px-4 py-3.5 text-left transition-colors hover:bg-accent disabled:opacity-60"
       >
         <span
           className={cn(

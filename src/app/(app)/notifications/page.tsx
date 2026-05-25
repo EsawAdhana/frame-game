@@ -2,10 +2,12 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { NotificationList } from "@/components/notification-list";
 import { listNotifications } from "@/lib/db/notifications";
+import { markNotificationsInboxSeen } from "@/app/actions/notifications";
 
 export const dynamic = "force-dynamic";
 
 export default async function NotificationsPage() {
+  await markNotificationsInboxSeen();
   const notifications = await listNotifications();
 
   return (
