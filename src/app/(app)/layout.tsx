@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionProfile } from "@/lib/supabase/server";
 import { BottomNav } from "@/components/bottom-nav";
+import { NotificationBell } from "@/components/notification-bell";
 
 export default async function AppLayout({
   children,
@@ -23,12 +24,15 @@ export default async function AppLayout({
         >
           FrameGame
         </Link>
-        <Link
-          href={`/u/${profile.username}`}
-          className="text-xs text-muted-foreground hover:text-foreground"
-        >
-          @{profile.username}
-        </Link>
+        <div className="flex items-center gap-2">
+          <NotificationBell />
+          <Link
+            href={`/u/${profile.username}`}
+            className="text-xs text-muted-foreground hover:text-foreground"
+          >
+            @{profile.username}
+          </Link>
+        </div>
       </header>
       <div className="flex flex-1 flex-col">{children}</div>
       <BottomNav />

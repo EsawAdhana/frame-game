@@ -52,6 +52,7 @@ export async function createPost(formData: FormData): Promise<PostResult> {
   }
 
   revalidatePath("/today");
+  revalidatePath("/notifications");
   revalidatePath("/");
   return { ok: true, postId: data.id };
 }

@@ -40,6 +40,30 @@ export type Comment = {
   author: Pick<Profile, "id" | "username" | "display_name" | "avatar_url">;
 };
 
+export type NotificationType =
+  | "new_prompt"
+  | "friend_post"
+  | "new_follower"
+  | "post_like"
+  | "post_comment";
+
+export type Notification = {
+  id: string;
+  user_id: string;
+  type: NotificationType;
+  actor_id: string | null;
+  post_id: string | null;
+  prompt_id: string | null;
+  read_at: string | null;
+  created_at: string;
+};
+
+export type NotificationWithActor = Notification & {
+  actor: Pick<Profile, "id" | "username" | "display_name" | "avatar_url"> | null;
+  href: string;
+  message: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -83,6 +107,15 @@ export type Database = {
         };
         Insert: { post_id: string; user_id: string; reason?: string | null };
         Update: never;
+      };
+      notifications: {
+        Row: Notification;
+        Insert: Omit<Notification, "id" | "created_at" | "read_at"> & {
+          id?: string;
+          created_at?: string;
+          read_at?: string | null;
+        };
+        Update: Partial<Pick<Notification, "read_at">>;
       };
     };
   };

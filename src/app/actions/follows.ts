@@ -42,6 +42,7 @@ export async function toggleFollow(targetUserId: string): Promise<FollowResult> 
 
   // Refresh feed ordering and the target's profile page.
   revalidatePath("/today");
+  revalidatePath("/notifications");
   const { data: target } = await supabase
     .from("profiles")
     .select("username")
