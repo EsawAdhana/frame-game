@@ -88,9 +88,7 @@ export function SignInForm() {
 
       <p className="mt-4 text-xs text-muted-foreground">
         {mode === "signup"
-          ? "We&apos;ll never email you. Pick any password &mdash; it&apos;s just for this class beta."
-              .replace(/&apos;/g, "\u2019")
-              .replace(/&mdash;/g, "\u2014")
+          ? "Your email is only used to sign in \u2014 we won\u2019t send you mail."
           : "No account? Tap \u201cCreate account\u201d above."}
       </p>
     </div>

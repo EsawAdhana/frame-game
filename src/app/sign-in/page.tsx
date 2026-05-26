@@ -11,9 +11,9 @@ export default function SignInPage() {
         ← Back
       </Link>
       <div className="mt-10">
-        <h1 className="font-serif text-3xl font-medium text-foreground">Sign in</h1>
+        <h1 className="font-serif text-3xl font-medium text-foreground">Welcome</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Email and password. No link to click, no codes to type.
+          Sign in or create an account to get started.
         </p>
       </div>
       <div className="mt-8">

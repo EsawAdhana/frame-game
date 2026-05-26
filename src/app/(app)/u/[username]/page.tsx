@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
 import { CollageGrid } from "@/components/collage-grid";
@@ -46,7 +47,16 @@ export default async function ProfilePage({
         </div>
       </section>
 
-      {viewer && !isMe && (
+      {isMe ? (
+        <div className="mt-4">
+          <Link
+            href="/settings"
+            className="inline-flex items-center rounded-full border border-border px-4 py-1.5 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+          >
+            Edit profile
+          </Link>
+        </div>
+      ) : viewer && (
         <div className="mt-4">
           <FollowButton
             targetUserId={profile.id}

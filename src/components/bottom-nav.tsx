@@ -5,15 +5,14 @@ import { usePathname } from "next/navigation";
 import { Archive, Home, Plus, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const items = [
-  { href: "/today", label: "Today", icon: Home },
-  { href: "/archive", label: "Archive", icon: Archive },
-  { href: "/compose", label: "Post", icon: Plus, primary: true },
-  { href: "/settings", label: "You", icon: User },
-];
-
-export function BottomNav() {
+export function BottomNav({ username }: { username: string }) {
   const pathname = usePathname();
+  const items = [
+    { href: "/today", label: "Today", icon: Home },
+    { href: "/archive", label: "Archive", icon: Archive },
+    { href: "/compose", label: "Post", icon: Plus, primary: true },
+    { href: `/u/${username}`, label: "You", icon: User },
+  ];
   return (
     <nav
       className="sticky bottom-0 z-10 mt-auto grid grid-cols-4 border-t border-border bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm"
