@@ -7,6 +7,61 @@ import { getRankedFeedForPrompt, hasPostedForPrompt } from "@/lib/db/posts";
 
 export const dynamic = "force-dynamic";
 
+function TodayFeedSections({
+  feed,
+  locked,
+}: {
+  feed: Awaited<ReturnType<typeof getRankedFeedForPrompt>>;
+  locked: boolean;
+}) {
+  return (
+    <div className="space-y-6">
+      {feed.mine.length > 0 && (
+        <section>
+          <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Your post
+          </h3>
+          <CollageGrid
+            posts={feed.mine}
+            avatarOpensProfile={false}
+            locked={locked}
+          />
+        </section>
+      )}
+      {feed.friends.length > 0 && (
+        <section
+          className={feed.mine.length > 0 ? "border-t border-border pt-6" : ""}
+        >
+          <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Friends
+          </h3>
+          <CollageGrid
+            posts={feed.friends}
+            avatarOpensProfile={false}
+            locked={locked}
+          />
+        </section>
+      )}
+      <section
+        className={
+          feed.mine.length > 0 || feed.friends.length > 0
+            ? "border-t border-border pt-6"
+            : ""
+        }
+      >
+        <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          Everyone
+        </h3>
+        <CollageGrid
+          posts={feed.others}
+          avatarOpensProfile={false}
+          locked={locked}
+        />
+      </section>
+    </div>
+  );
+}
+
 export default async function TodayPage() {
   const prompt = await getTodayPrompt();
 
@@ -53,48 +108,13 @@ export default async function TodayPage() {
       <div className="mt-6">
         <div className="mb-3 flex items-end justify-between">
           <h2 className="text-sm font-semibold text-foreground">
-            {hasPosted ? "Today\u2019s collage" : `Peek (${totalPosts})`}
+            Today&apos;s collage
           </h2>
           <span className="text-xs text-muted-foreground">
             {totalPosts} post{totalPosts === 1 ? "" : "s"}
           </span>
         </div>
-        {hasPosted ? (
-          <div className="space-y-6">
-            {feed.mine.length > 0 && (
-              <section>
-                <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Your post
-                </h3>
-                <CollageGrid posts={feed.mine} avatarOpensProfile={false} />
-              </section>
-            )}
-            {feed.friends.length > 0 && (
-              <section className="border-t border-border pt-6">
-                <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Friends
-                </h3>
-                <CollageGrid posts={feed.friends} avatarOpensProfile={false} />
-              </section>
-            )}
-            <section
-              className={
-                feed.mine.length > 0 || feed.friends.length > 0
-                  ? "border-t border-border pt-6"
-                  : ""
-              }
-            >
-              <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Everyone
-              </h3>
-              <CollageGrid posts={feed.others} avatarOpensProfile={false} />
-            </section>
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-border px-6 py-10 text-center text-sm text-muted-foreground">
-            Post today&apos;s photo to reveal everyone else&apos;s.
-          </div>
-        )}
+        <TodayFeedSections feed={feed} locked={!hasPosted} />
       </div>
     </main>
   );
