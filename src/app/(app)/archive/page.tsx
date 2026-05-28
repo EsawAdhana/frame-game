@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatPromptDate } from "@/lib/utils";
 import { listPastPrompts } from "@/lib/db/prompts";
 
 export const dynamic = "force-dynamic";
@@ -20,13 +21,10 @@ export default async function ArchivePage() {
       ) : (
         <ul className="mt-6 space-y-2">
           {prompts.map((p) => {
-            const label = new Date(
-              `${p.active_date}T00:00:00Z`,
-            ).toLocaleDateString(undefined, {
+            const label = formatPromptDate(p.active_date, {
               month: "short",
               day: "numeric",
               year: "numeric",
-              timeZone: "UTC",
             });
             return (
               <li key={p.id}>

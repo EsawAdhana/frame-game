@@ -4,21 +4,32 @@ import { ChevronLeft, MessageCircle } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { CommentThread } from "@/components/comment-thread";
 import { LikeButton } from "@/components/like-button";
+import { PromptHero } from "@/components/prompt-hero";
 import { PostActions } from "./post-actions";
 import { ReportButton } from "@/components/report-button";
 import { getPostById } from "@/lib/db/posts";
 import { getCommentsForPost } from "@/lib/db/comments";
 import { getSessionUser } from "@/lib/supabase/server";
-import { relativeTime } from "@/lib/utils";
+import { relativeTime, formatPromptDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
+function safeBackHref(from: string | undefined): string {
+  if (from && from.startsWith("/") && !from.startsWith("//")) {
+    return from;
+  }
+  return "/today";
+}
+
 export default async function PostDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ from?: string }>;
 }) {
   const { id } = await params;
+  const { from } = await searchParams;
   const [post, comments, viewer] = await Promise.all([
     getPostById(id),
     getCommentsForPost(id),
@@ -27,12 +38,21 @@ export default async function PostDetailPage({
   if (!post) notFound();
 
   const isMine = viewer?.id === post.user_id;
+  const backHref = safeBackHref(from);
+  const promptDateLabel = post.prompt
+    ? formatPromptDate(post.prompt.active_date, {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
 
   return (
     <main className="flex-1">
       <div className="flex items-center justify-between px-5 py-3">
         <Link
-          href="/today"
+          href={backHref}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
           <ChevronLeft className="h-4 w-4" /> Back
@@ -86,10 +106,23 @@ export default async function PostDetailPage({
           </div>
         </div>
 
+        {post.prompt && (
+          <PromptHero
+            text={post.prompt.text}
+            date={promptDateLabel ?? undefined}
+            eyebrow="Prompt on"
+          />
+        )}
+
         {post.caption && (
-          <p className="whitespace-pre-wrap break-words text-sm">
-            {post.caption}
-          </p>
+          <div>
+            <div className="mb-1 text-xs font-medium text-muted-foreground">
+              Caption
+            </div>
+            <p className="whitespace-pre-wrap break-words text-sm">
+              {post.caption}
+            </p>
+          </div>
         )}
 
         <div className="border-t border-border pt-4">

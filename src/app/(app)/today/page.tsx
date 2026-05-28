@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatPromptDate } from "@/lib/utils";
 import { PromptHero } from "@/components/prompt-hero";
 import { CollageGrid } from "@/components/collage-grid";
 import { Button } from "@/components/ui/button";
@@ -82,10 +83,7 @@ export default async function TodayPage() {
   ]);
   const totalPosts = feed.mine.length + feed.friends.length + feed.others.length;
 
-  const dateLabel = new Date(`${prompt.active_date}T00:00:00Z`).toLocaleDateString(
-    undefined,
-    { month: "short", day: "numeric", timeZone: "UTC" },
-  );
+  const dateLabel = formatPromptDate(prompt.active_date);
 
   return (
     <main className="flex-1 px-5 py-6">

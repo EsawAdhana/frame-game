@@ -3,7 +3,9 @@ import { promoteTodayPrompt } from "@/lib/db/prompts";
 
 /**
  * Vercel-compatible cron endpoint. Add to vercel.json:
- *   { "crons": [{ "path": "/api/cron/daily-prompt", "schedule": "0 0 * * *" }] }
+ *   { "crons": [{ "path": "/api/cron/daily-prompt", "schedule": "0 19 * * *" }] }
+ * Schedule is 19:00 UTC = 12:00 PM Pacific during PDT (Mar–Nov).
+ * During PST, update to "0 20 * * *". On-demand promotion also runs on page load.
  * Protected by CRON_SECRET when set (Vercel sends it as the "Authorization"
  * header "Bearer <secret>").
  */

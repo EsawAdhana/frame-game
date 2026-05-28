@@ -1,5 +1,6 @@
-import Link from "next/link";
+import { formatPromptDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { PromptHero } from "@/components/prompt-hero";
 import { CollageGrid } from "@/components/collage-grid";
@@ -20,12 +21,11 @@ export default async function ArchiveDatePage({
   if (!prompt) notFound();
   const posts = await getFeedForPrompt(prompt.id);
 
-  const dateLabel = new Date(`${date}T00:00:00Z`).toLocaleDateString(undefined, {
+  const dateLabel = formatPromptDate(date, {
     weekday: "long",
     month: "short",
     day: "numeric",
     year: "numeric",
-    timeZone: "UTC",
   });
 
   return (

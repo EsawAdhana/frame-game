@@ -75,7 +75,7 @@ export default async function ProfilePage({
         <h2 className="mb-3 text-sm font-semibold text-foreground">
           History
         </h2>
-        <CollageGrid posts={posts} />
+        <CollageGrid posts={posts} fromHref={`/u/${username}`} />
       </div>
     </main>
   );

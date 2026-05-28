@@ -6,6 +6,8 @@
  *
  *   node scripts/preflight.js
  */
+const { todayPromptDate } = require("./prompt-date");
+
 const required = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
@@ -34,6 +36,8 @@ async function main() {
     "posts",
     "likes",
     "comments",
+    "follows",
+    "notifications",
     "reports",
   ];
   for (const t of tables) {
@@ -54,7 +58,7 @@ async function main() {
     console.warn("⚠️  Fewer than 7 unused prompts left — reseed soon.");
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayPromptDate();
   const { data: todaysPrompt } = await supabase
     .from("prompts")
     .select("text")
@@ -78,6 +82,9 @@ async function main() {
   }
 
   console.log("\nAll checks complete.");
+  console.log(
+    "\nReminder: In Supabase dashboard, confirm Auth → Providers → Email → Confirm email is OFF.",
+  );
 }
 
 main().catch((e) => {

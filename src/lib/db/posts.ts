@@ -1,7 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { getFollowingIds } from "@/lib/db/follows";
-import type { PostWithAuthor } from "@/lib/types";
+import type { PostDetail, PostWithAuthor } from "@/lib/types";
 
 export type RankedFeed = {
   mine: PostWithAuthor[];
@@ -63,6 +63,15 @@ const FEED_SELECT_SIMPLE = `
   likes:likes(count),
   comments:comments(count)
 `;
+
+const POST_DETAIL_SELECT = `
+  ${FEED_SELECT_SIMPLE},
+  prompts:prompts!posts_prompt_id_fkey ( text, active_date )
+`;
+
+type PostDetailRow = FeedRow & {
+  prompts: { text: string; active_date: string } | null;
+};
 
 async function getViewerLikes(postIds: string[]): Promise<Set<string>> {
   if (postIds.length === 0) return new Set();
@@ -151,22 +160,27 @@ export async function getRankedFeedForPrompt(
   return { mine, friends, others };
 }
 
-export async function getPostById(id: string): Promise<PostWithAuthor | null> {
+export async function getPostById(id: string): Promise<PostDetail | null> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   const { data } = await supabase
     .from("posts")
-    .select(FEED_SELECT_SIMPLE)
+    .select(POST_DETAIL_SELECT)
     .eq("id", id)
     .maybeSingle();
   if (!data) return null;
-  const row = data as unknown as FeedRow;
+  const row = data as unknown as PostDetailRow;
   const likedSet = await getViewerLikes([row.id]);
   const shaped = shapeRow(row, user?.id ?? null);
   shaped.liked_by_me = likedSet.has(row.id);
-  return shaped;
+  return {
+    ...shaped,
+    prompt: row.prompts
+      ? { text: row.prompts.text, active_date: row.prompts.active_date }
+      : null,
+  };
 }
 
 export async function getPostsByUsername(

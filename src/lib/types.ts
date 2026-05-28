@@ -32,6 +32,10 @@ export type PostWithAuthor = Post & {
   liked_by_me: boolean;
 };
 
+export type PostDetail = PostWithAuthor & {
+  prompt: Pick<Prompt, "text" | "active_date"> | null;
+};
+
 export type Comment = {
   id: string;
   post_id: string;

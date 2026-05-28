@@ -1,7 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { todayUtcDate } from "@/lib/utils";
+import { todayPromptDate } from "@/lib/utils";
 import type { Prompt } from "@/lib/types";
 
 /**
@@ -12,7 +12,7 @@ import type { Prompt } from "@/lib/types";
  */
 export async function getTodayPrompt(): Promise<Prompt | null> {
   const supabase = await createClient();
-  const today = todayUtcDate();
+  const today = todayPromptDate();
   const { data } = await supabase
     .from("prompts")
     .select("*")
@@ -39,7 +39,7 @@ export async function getPromptByDate(date: string): Promise<Prompt | null> {
 
 export async function listPastPrompts(limit = 60): Promise<Prompt[]> {
   const supabase = await createClient();
-  const today = todayUtcDate();
+  const today = todayPromptDate();
   const { data } = await supabase
     .from("prompts")
     .select("*")
@@ -55,7 +55,7 @@ export async function listPastPrompts(limit = 60): Promise<Prompt[]> {
  */
 export async function promoteTodayPrompt(): Promise<Prompt | null> {
   const admin = createAdminClient();
-  const today = todayUtcDate();
+  const today = todayPromptDate();
 
   const { data: existing } = await admin
     .from("prompts")

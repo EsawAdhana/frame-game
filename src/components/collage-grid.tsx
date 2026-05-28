@@ -15,6 +15,7 @@ export function CollageGrid({
   posts,
   avatarOpensProfile = true,
   locked = false,
+  fromHref,
 }: {
   posts: PostWithAuthor[];
   /**
@@ -25,6 +26,8 @@ export function CollageGrid({
   avatarOpensProfile?: boolean;
   /** Blur tiles and show a lock; taps open a prompt instead of the post. */
   locked?: boolean;
+  /** When set, post links include ?from= for contextual back navigation. */
+  fromHref?: string;
 }) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
@@ -45,6 +48,7 @@ export function CollageGrid({
             post={p}
             avatarOpensProfile={avatarOpensProfile}
             locked={locked}
+            fromHref={fromHref}
             onLockedClick={() => setDialogOpen(true)}
           />
         ))}
@@ -97,15 +101,23 @@ function LockedFeedDialog({ onClose }: { onClose: () => void }) {
   );
 }
 
+function postHref(postId: string, fromHref?: string) {
+  const base = `/post/${postId}`;
+  if (!fromHref) return base;
+  return `${base}?from=${encodeURIComponent(fromHref)}`;
+}
+
 function PostTile({
   post,
   avatarOpensProfile,
   locked,
+  fromHref,
   onLockedClick,
 }: {
   post: PostWithAuthor;
   avatarOpensProfile: boolean;
   locked: boolean;
+  fromHref?: string;
   onLockedClick: () => void;
 }) {
   const authorStrip = (
@@ -160,7 +172,7 @@ function PostTile({
   if (!avatarOpensProfile) {
     return (
       <Link
-        href={`/post/${post.id}`}
+        href={postHref(post.id, fromHref)}
         className="group relative block overflow-hidden rounded-2xl bg-muted"
       >
         {image}
@@ -172,7 +184,7 @@ function PostTile({
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-muted">
       <Link
-        href={`/post/${post.id}`}
+        href={postHref(post.id, fromHref)}
         className="block"
         aria-label={post.caption ?? `Post by @${post.author.username}`}
       >

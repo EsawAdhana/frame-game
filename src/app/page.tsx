@@ -39,7 +39,7 @@ export default async function LandingPage() {
           </Button>
         </Link>
         <p className="text-center text-xs text-muted-foreground">
-          Magic-link sign-in. No passwords.
+          Email sign-up. Pick a password to get started.
         </p>
       </div>
     </main>

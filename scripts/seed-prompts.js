@@ -45,7 +45,8 @@ async function main() {
     console.log(`Inserted ${toInsert.length} new prompts.`);
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const { todayPromptDate } = require("./prompt-date");
+  const today = todayPromptDate();
   const { data: todays } = await supabase
     .from("prompts")
     .select("id")
