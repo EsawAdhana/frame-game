@@ -9,6 +9,7 @@ import { PostActions } from "./post-actions";
 import { ReportButton } from "@/components/report-button";
 import { getPostById } from "@/lib/db/posts";
 import { getCommentsForPost } from "@/lib/db/comments";
+import { getTagsForPost } from "@/lib/db/tags";
 import { getSessionUser } from "@/lib/supabase/server";
 import { relativeTime, formatPromptDate } from "@/lib/utils";
 
@@ -30,10 +31,11 @@ export default async function PostDetailPage({
 }) {
   const { id } = await params;
   const { from } = await searchParams;
-  const [post, comments, viewer] = await Promise.all([
+  const [post, comments, viewer, tags] = await Promise.all([
     getPostById(id),
     getCommentsForPost(id),
     getSessionUser(),
+    getTagsForPost(id),
   ]);
   if (!post) notFound();
 
@@ -123,6 +125,23 @@ export default async function PostDetailPage({
               {post.caption}
             </p>
           </div>
+        )}
+
+        {tags.length > 0 && (
+          <p className="text-xs text-muted-foreground">
+            with{" "}
+            {tags.map((tag, i) => (
+              <span key={tag.id}>
+                {i > 0 && ", "}
+                <Link
+                  href={`/u/${tag.tagged_user.username}`}
+                  className="font-medium text-foreground hover:underline"
+                >
+                  @{tag.tagged_user.username}
+                </Link>
+              </span>
+            ))}
+          </p>
         )}
 
         <div className="border-t border-border pt-4">

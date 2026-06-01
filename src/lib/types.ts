@@ -50,7 +50,8 @@ export type NotificationType =
   | "friend_post"
   | "new_follower"
   | "post_like"
-  | "post_comment";
+  | "post_comment"
+  | "tag";
 
 export type Notification = {
   id: string;

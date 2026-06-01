@@ -51,6 +51,19 @@ export async function createPost(formData: FormData): Promise<PostResult> {
     return { ok: false, error: error.message };
   }
 
+  let taggedUserIds: string[] = [];
+  try {
+    const raw = JSON.parse(String(formData.get("tagged_user_ids") ?? "[]"));
+    if (Array.isArray(raw)) taggedUserIds = raw.filter((v) => typeof v === "string");
+  } catch {
+    // ignore malformed input
+  }
+  if (taggedUserIds.length > 0) {
+    await supabase.from("post_tags").insert(
+      taggedUserIds.map((uid) => ({ post_id: data.id, tagged_user_id: uid })),
+    );
+  }
+
   revalidatePath("/today");
   revalidatePath("/notifications");
   revalidatePath("/");

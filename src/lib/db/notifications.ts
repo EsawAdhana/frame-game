@@ -29,6 +29,7 @@ function notificationHref(row: NotificationRow): string {
     case "friend_post":
     case "post_like":
     case "post_comment":
+    case "tag":
       return row.post_id ? `/post/${row.post_id}` : "/today";
     case "new_follower":
       return row.actor?.username ? `/u/${row.actor.username}` : "/today";
@@ -50,6 +51,8 @@ function notificationMessage(row: NotificationRow): string {
       return `${who} liked your post.`;
     case "post_comment":
       return `${who} commented on your post.`;
+    case "tag":
+      return `${who} tagged you in a post.`;
     default:
       return "You have a new notification.";
   }

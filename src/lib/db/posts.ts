@@ -226,6 +226,43 @@ export async function hasPostedForPrompt(promptId: string): Promise<boolean> {
   return !!data;
 }
 
+export async function getTaggedPostsByUsername(
+  username: string,
+): Promise<PostWithAuthor[]> {
+  const supabase = await createClient();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("username", username)
+    .maybeSingle();
+  if (!profile) return [];
+
+  const { data: tagRows } = await supabase
+    .from("post_tags")
+    .select("post_id")
+    .eq("tagged_user_id", profile.id);
+
+  const postIds = (tagRows ?? []).map((r) => r.post_id as string);
+  if (postIds.length === 0) return [];
+
+  const { data } = await supabase
+    .from("posts")
+    .select(FEED_SELECT_SIMPLE)
+    .in("id", postIds)
+    .order("created_at", { ascending: false });
+
+  const rows = (data ?? []) as unknown as FeedRow[];
+  const likedSet = await getViewerLikes(rows.map((r) => r.id));
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return rows.map((r) => {
+    const shaped = shapeRow(r, user?.id ?? null);
+    shaped.liked_by_me = likedSet.has(r.id);
+    return shaped;
+  });
+}
+
 export function postImageUrl(path: string) {
   return publicUrl(path);
 }
