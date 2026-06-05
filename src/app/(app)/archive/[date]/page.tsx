@@ -46,7 +46,7 @@ export default async function ArchiveDatePage({
             {posts.length} post{posts.length === 1 ? "" : "s"}
           </span>
         </div>
-        <CollageGrid posts={posts} />
+        <CollageGrid posts={posts} emptyMessage="No submissions." />
       </div>
     </main>
   );

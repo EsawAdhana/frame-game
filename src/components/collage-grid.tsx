@@ -16,6 +16,7 @@ export function CollageGrid({
   avatarOpensProfile = true,
   locked = false,
   fromHref,
+  emptyMessage = "No submissions yet. Be the first.",
 }: {
   posts: PostWithAuthor[];
   /**
@@ -28,13 +29,15 @@ export function CollageGrid({
   locked?: boolean;
   /** When set, post links include ?from= for contextual back navigation. */
   fromHref?: string;
+  /** Shown when `posts` is empty. Defaults to a today-style invite. */
+  emptyMessage?: string;
 }) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   if (posts.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border px-6 py-12 text-center text-sm text-muted-foreground">
-        No submissions yet. Be the first.
+        {emptyMessage}
       </div>
     );
   }

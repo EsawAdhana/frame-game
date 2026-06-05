@@ -53,7 +53,9 @@ function NotificationRow({ notification }: { notification: NotificationWithActor
         <span
           className={cn(
             "mt-2 h-2 w-2 shrink-0 rounded-full",
-            unread ? "bg-white ring-1 ring-border" : "bg-transparent",
+            unread
+              ? "bg-primary ring-2 ring-card"
+              : "bg-transparent",
           )}
           aria-hidden
         />
